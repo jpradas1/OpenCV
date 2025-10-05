@@ -252,6 +252,6 @@ The message appearing in the terminal output, it has easy solution it is just ne
 sudo apt install qt6-wayland -y
 ```
 
-Execution once again the main code,
+Executing once again the main code,
 
 <img src="./images/tutorial_01/04.png" width=800>
