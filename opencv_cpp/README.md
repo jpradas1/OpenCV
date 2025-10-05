@@ -258,7 +258,7 @@ Executing once again the main code,
 
 ## Tutorial 02: bilateralFilter, GaussianBlur, medianBlur
 
-In this tutorial let's apply some filter on images and discuss the properties of the following filters.
+In this tutorial let's apply some filter on images and discuss the properties of the following filters. [Image Filtering OpenCV](https://docs.opencv.org/4.3.0/d4/d86/group__imgproc__filter.html)
 
 ```cpp
 #include <opencv2/highgui.hpp>
