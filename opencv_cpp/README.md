@@ -223,3 +223,35 @@ int main()
 }
 ```
 <img src="./images/tutorial_01/01.png" width=800>
+
+In this case we see that the image app has no options to zoom in or out, or to mode the image, this is because the building of the library did not take into account the **Qt** option to show pictures. Then, let's install **Qt6** and rebuild the library.
+
+```bash
+sudo apt install qt6-base-dev -y
+```
+```bash
+cd .../build
+sudo make uninstall
+
+cmake -D CMAKE_BUILT_TYPE=Release \
+-D CMAKE_INSTALL_PREFIX=/usr/local \
+-D OPENCV_GENERATE_PKGCONFIG=ON \
+-D WITH_QT=ON ..
+
+make -j8
+sudo make install
+```
+
+Now, when we execute the main code, we get:
+
+<img src="./images/tutorial_01/02.png" width=800>
+<img src="./images/tutorial_01/03.png" width=800>
+
+The message appearing in the terminal output, it has easy solution it is just necessary to install `qt6-wayland`,
+```bash
+sudo apt install qt6-wayland -y
+```
+
+Execution once again the main code,
+
+<img src="./images/tutorial_01/04.png" width=800>
