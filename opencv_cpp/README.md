@@ -322,3 +322,114 @@ From these images we can conclude:
 1. Among these filters, the bilateral filter is the best preserving edges and smoothing the inner zones.
 2. The median filter  makes no distinction between egdes or zones, just smooth image according to its kernel size.
 3. These 3 filters have the capability of removing background noise.
+
+## Tutorial 03: erode & dilate
+
+In this new tutorial we deal with `erode` and `dilate` filters for color images and binary images.
+
+```cpp
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+
+int main()
+{
+    cv::Mat img = cv::imread("./binary.png", cv::IMREAD_COLOR);
+    cv::threshold(img, img, 125, 255, cv::THRESH_BINARY);
+
+    int size = 3;
+    cv::Mat erodedImg, dilatedImg;
+    cv::Mat elementKernel = cv::getStructuringElement(
+        cv::MORPH_RECT, cv::Size(size,size), cv::Point(-1,-1)
+    );
+
+    cv::erode(img, erodedImg, elementKernel, cv::Point(-1,-1), 1);
+    cv::dilate(img, dilatedImg, elementKernel, cv::Point(-1,-1), 1);
+
+    cv::imwrite("./../images/tutorial_03/00.png", img);
+    cv::imwrite("./../images/tutorial_03/01.png", erodedImg);
+    cv::imwrite("./../images/tutorial_03/02.png", dilatedImg);
+
+    cv::imshow("Input Image", img);
+    cv::imshow("Erode Filter", erodedImg);
+    cv::imshow("Dilate Filter", dilatedImg);
+    cv::waitKey(0);
+
+    return 0;
+}
+```
+
+In this case we have define a kernel size of 3x3, which is the default kernel size. Before erode or dilate image, first we threshold and binarize the input image, in order to see the power of these filters. After applying the filters this is the result:
+
+<table style="border-collapse: collapse; border: none;">
+  <tr>
+    <td align="center" style="border: none;">
+      <img src="./images/tutorial_03/00.png" width="400"><br>
+      <p><b>Image 1:</b> Input Image. </p>
+    </td>
+    <td align="center" style="border: none;">
+      <img src="./images/tutorial_03/01.png" width="400"><br>
+      <p><b>Image 2:</b> Eroded Image (3x3). </p>
+    </td>
+    <td align="center" style="border: none;">
+      <img src="./images/tutorial_03/02.png" width="400"><br>
+      <p><b>Image 3:</b> Dilated Image (3x3). </p>
+    </td>
+  </tr>
+</table>
+
+We could combine these 2 filters in order to remove thin elements and restore wider ones. For example, if we use a kernel size of 2x2,
+
+```cpp
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+
+int main()
+{
+    cv::Mat img = cv::imread("./binary.png", cv::IMREAD_COLOR);
+    cv::threshold(img, img, 125, 255, cv::THRESH_BINARY);
+
+    // int size = 3;
+    int size = 2;
+    cv::Mat erodedImg, dilatedImg;
+    cv::Mat elementKernel = cv::getStructuringElement(
+        cv::MORPH_RECT, cv::Size(size,size), cv::Point(-1,-1)
+    );
+
+    cv::erode(img, erodedImg, elementKernel, cv::Point(-1,-1), 1);
+    // cv::dilate(img, dilatedImg, elementKernel, cv::Point(-1,-1), 1);
+    cv::dilate(erodedImg, dilatedImg, elementKernel, cv::Point(-1,-1), 1);
+
+    // cv::imwrite("./../images/tutorial_03/00.png", img);
+    // cv::imwrite("./../images/tutorial_03/01.png", erodedImg);
+    // cv::imwrite("./../images/tutorial_03/02.png", dilatedImg);
+    cv::imwrite("./../images/tutorial_03/03.png", erodedImg);
+    cv::imwrite("./../images/tutorial_03/04.png", dilatedImg);
+
+    cv::imshow("Input Image", img);
+    cv::imshow("Erode Filter", erodedImg);
+    cv::imshow("Dilate Filter", dilatedImg);
+    cv::waitKey(0);
+
+    return 0;
+}
+```
+
+This configuration generates,
+
+<table style="border-collapse: collapse; border: none;">
+  <tr>
+    <td align="center" style="border: none;">
+      <img src="./images/tutorial_03/00.png" width="400"><br>
+      <p><b>Image 1:</b> Input Image. </p>
+    </td>
+    <td align="center" style="border: none;">
+      <img src="./images/tutorial_03/03.png" width="400"><br>
+      <p><b>Image 2:</b> Eroded Image (2x2). </p>
+    </td>
+    <td align="center" style="border: none;">
+      <img src="./images/tutorial_03/04.png" width="400"><br>
+      <p><b>Image 3:</b> Dilated Image (2x2). </p>
+    </td>
+  </tr>
+</table>
+
