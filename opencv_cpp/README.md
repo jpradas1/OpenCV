@@ -255,3 +255,70 @@ sudo apt install qt6-wayland -y
 Executing once again the main code,
 
 <img src="./images/tutorial_01/04.png" width=800>
+
+## Tutorial 02: bilateralFilter, GaussianBlur, medianBlur
+
+In this tutorial let's apply some filter on images and discuss the properties of the following filters.
+
+```cpp
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+
+int main()
+{
+    cv::Mat img = cv::imread("./pool.jpg", cv::IMREAD_COLOR);
+
+    // PROCESSING IMAGE
+    cv::Mat bilateralImg, gaussianImg, medianImg;
+
+    cv::bilateralFilter(img, bilateralImg, 15, 95, 45);
+    cv::GaussianBlur(img, gaussianImg, cv::Size(15,15), 0);
+    cv::medianBlur(img, medianImg, 15);
+
+    // SAVE IMAGE
+    cv::imwrite("./../images/tutorial_02/00.jpg", img);
+    cv::imwrite("./../images/tutorial_02/01.jpg", bilateralImg);
+    cv::imwrite("./../images/tutorial_02/02.jpg", gaussianImg);
+    cv::imwrite("./../images/tutorial_02/03.jpg", medianImg);
+
+    // PLOTTING
+    cv::imshow("Input Image", img);
+    cv::imshow("Bilateral Filter", bilateralImg);
+    cv::imshow("Gaussian Filter", gaussianImg);
+    cv::imshow("Median Filter", medianImg);
+    cv::waitKey(0);
+
+    return 0;
+}
+```
+
+This code load the image of a pool, then apply on this image 3 kind of filters, a bilaterial, gaussian and median filter. Let's see its results:
+
+<table style="border-collapse: collapse; border: none;">
+  <tr>
+    <td align="center" style="border: none;">
+      <img src="./images/tutorial_02/00.jpg" width="400"><br>
+      <p><b>Image 1:</b> Input Image </p>
+    </td>
+    <td align="center" style="border: none;">
+      <img src="./images/tutorial_02/01.jpg" width="400"><br>
+      <p><b>Image 2:</b> Bilateral Filter </p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" style="border: none;">
+      <img src="./images/tutorial_02/02.jpg" width="400"><br>
+      <p><b>Image 3:</b> Gaussian Filter</p>
+    </td>
+    <td align="center" style="border: none;">
+      <img src="./images/tutorial_02/03.jpg" width="400"><br>
+      <p><b>Image 4:</b> Median Filter</p>
+    </td>
+  </tr>
+</table>
+
+From these images we can conclude:
+
+1. Among these filters, the bilateral filter is the best preserving edges and smoothing the inner zones.
+2. The median filter  makes no distinction between egdes or zones, just smooth image according to its kernel size.
+3. These 3 filters have the capability of removing background noise.
